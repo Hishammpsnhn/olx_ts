@@ -11,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 interface AuthContextType {
   currentUser: UserInfo | null;
   setCurrentUser: (user: UserInfo | null) => void;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
 }
 
 interface AuthProviderProps {
@@ -19,22 +21,22 @@ interface AuthProviderProps {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: AuthProviderProps) {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState<UserInfo | null>(null);
+  const [loading,setLoading] = useState(false)
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userInfo");
     if (storedUser) {
       const user = JSON.parse(storedUser) as UserInfo;
-      console.log(user)
+      console.log(user);
       setCurrentUser(user);
-      navigate('/')
+      navigate("/");
     }
-
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser, setCurrentUser }}>
+    <AuthContext.Provider value={{ currentUser, setCurrentUser,loading,setLoading }}>
       {children}
     </AuthContext.Provider>
   );

@@ -10,9 +10,9 @@ import { userInfo } from "os";
 
 function Login() {
   const navigate = useNavigate();
-  const { currentUser, setCurrentUser } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { currentUser, setCurrentUser, loading, setLoading } = useAuth();
+  const [email, setEmail] = useState("one@gmail.com");
+  const [password, setPassword] = useState("9656753610");
 
   useEffect(() => {
     if (currentUser) {
@@ -22,6 +22,7 @@ function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await signInWithEmailAndPassword(auth, email, password);
       const user = res.user;

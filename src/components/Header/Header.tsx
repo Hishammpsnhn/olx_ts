@@ -11,7 +11,14 @@ import { useAuth } from "../../context/authContext";
 function Header() {
   const [dropDown, setDropDown] = useState(false);
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const { currentUser,setCurrentUser } = useAuth();
+
+  const handleLogout = ()=>{
+    setCurrentUser(null);
+    // navigate("/login");
+    localStorage.removeItem('userInfo')
+    setDropDown(false)
+  }
 
   return (
     <>
@@ -61,7 +68,7 @@ function Header() {
               {dropDown && (
                 <div className="dropdownMenu">
                   <div onClick={() => navigate("/profile")}>Profile</div>
-                  <div onClick={() => {}}>Logout</div>
+                  <div onClick={handleLogout}>Logout</div>
                 </div>
               )}
             </>
