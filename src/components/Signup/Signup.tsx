@@ -6,6 +6,8 @@ import { User, UserInfo } from "../../model/userTypes";
 import { useAuth } from "../../context/authContext";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../config/firebase";
+import { disabledBtn } from "../../utils/inlineStyle";
+import ErrorMessage from "../Error/ErrorMsg";
 
 const initialData: User = {
   email: "",
@@ -14,12 +16,15 @@ const initialData: User = {
   password: "",
 };
 export default function Signup() {
-  const { currentUser, setCurrentUser } = useAuth();
+  const { currentUser, setCurrentUser, loading, setLoading } = useAuth();
 
   const [userData, setUserData] = useState<User>(initialData);
+  const [error, setError] = useState<string | null>(null);
+
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (error) setError(null);
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };
@@ -27,6 +32,7 @@ export default function Signup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log(userData);
+    setLoading(true);
 
     try {
       const res = await createUserWithEmailAndPassword(
@@ -47,8 +53,11 @@ export default function Signup() {
       setCurrentUser(userInfo);
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
       navigate("/");
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      console.log(error.code);
+      setError(error.code);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -68,6 +77,7 @@ export default function Signup() {
           src={Logo}
           alt="OLX Logo"
         />
+        {error && <ErrorMessage message={error} />}
         <form onSubmit={handleSubmit}>
           <label htmlFor="name">Username</label>
           <input
@@ -109,8 +119,12 @@ export default function Signup() {
             name="password"
             placeholder="Enter your password"
           />
-          <button className={style.button} type="submit">
-            Signup
+          <button
+            className={style.button}
+            type="submit"
+            style={loading ? { ...disabledBtn } : {}}
+          >
+            {!loading ? "Signup" : "loading..."}
           </button>
         </form>
         <span className={style.link} onClick={() => navigate("/login")}>

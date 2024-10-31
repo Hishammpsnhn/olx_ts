@@ -7,11 +7,13 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config/firebase";
 import { UserInfo } from "../../model/userTypes";
 import { disabledBtn } from "../../utils/inlineStyle";
+import ErrorMessage from "../Error/ErrorMsg";
 
 function Login() {
   const navigate = useNavigate();
   const { currentUser, setCurrentUser, loading, setLoading } = useAuth();
   const [email, setEmail] = useState("one@gmail.com");
+  const [error, setError] = useState<string | null>(null);
   const [password, setPassword] = useState("9656753610");
 
   useEffect(() => {
@@ -19,10 +21,14 @@ function Login() {
       navigate("/");
     }
   }, []);
+  useEffect(() => {
+    if (error) setError(null);
+  }, [email, password]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
     try {
       const res = await signInWithEmailAndPassword(auth, email, password);
       const user = res.user;
@@ -32,13 +38,14 @@ function Login() {
         name: user.displayName || "",
         phone: user.phoneNumber || "",
       };
-      setLoading(false);
       setCurrentUser(userInfo);
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
-
       navigate("/");
     } catch (error) {
       console.error("Error signing in:", error);
+      setError("invalid email or password");
+    } finally {
+      setLoading(false);
     }
   };
   console.log(currentUser);
@@ -47,6 +54,7 @@ function Login() {
       {/* {currentUser && <Navigate to={'/'} replace={true}/>} */}
       <div className={style.loginParentDiv}>
         <img className={style.logo} src={Logo} alt="OLX Logo" width="150px" />
+        {error && <ErrorMessage message={error} />}
         <form onSubmit={handleSubmit}>
           <label htmlFor="email">Email</label>
           <input
@@ -74,7 +82,7 @@ function Login() {
             disabled={loading}
             style={loading ? { ...disabledBtn } : {}}
           >
-            {loading ? "loading" : "Login"}
+            {loading ? "loading..." : "Login"}
           </button>
         </form>
         <span className={style.link} onClick={() => navigate("/signup")}>
