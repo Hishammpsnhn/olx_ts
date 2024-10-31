@@ -8,6 +8,7 @@ import { auth } from "../../config/firebase";
 import { UserInfo } from "../../model/userTypes";
 import { disabledBtn } from "../../utils/inlineStyle";
 import ErrorMessage from "../Error/ErrorMsg";
+import { validateLoginForm } from "../../utils/FormValidation";
 
 function Login() {
   const navigate = useNavigate();
@@ -27,6 +28,11 @@ function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const err = validateLoginForm({email,password})
+    if (err) {
+      setError(err);
+      return;
+    }
     setLoading(true);
     setError(null);
     try {

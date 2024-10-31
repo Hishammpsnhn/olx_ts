@@ -8,6 +8,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../config/firebase";
 import { disabledBtn } from "../../utils/inlineStyle";
 import ErrorMessage from "../Error/ErrorMsg";
+import { validateSignUpForm } from "../../utils/FormValidation";
 
 const initialData: User = {
   email: "",
@@ -31,9 +32,14 @@ export default function Signup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(userData);
-    setLoading(true);
 
+    const err = validateSignUpForm(userData);
+    if (err) {
+      setError(err);
+      return;
+    }
+
+    setLoading(true);
     try {
       const res = await createUserWithEmailAndPassword(
         auth,
