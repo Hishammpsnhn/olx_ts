@@ -6,7 +6,7 @@ import { useAuth } from "../../context/authContext";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config/firebase";
 import { UserInfo } from "../../model/userTypes";
-import { userInfo } from "os";
+import { disabledBtn } from "../../utils/inlineStyle";
 
 function Login() {
   const navigate = useNavigate();
@@ -32,6 +32,7 @@ function Login() {
         name: user.displayName || "",
         phone: user.phoneNumber || "",
       };
+      setLoading(false);
       setCurrentUser(userInfo);
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
 
@@ -67,8 +68,13 @@ function Login() {
             name="password"
             placeholder="Enter your password"
           />
-          <button type="submit" className={style.button}>
-            Login
+          <button
+            type="submit"
+            className={style.button}
+            disabled={loading}
+            style={loading ? { ...disabledBtn } : {}}
+          >
+            {loading ? "loading" : "Login"}
           </button>
         </form>
         <span className={style.link} onClick={() => navigate("/signup")}>
