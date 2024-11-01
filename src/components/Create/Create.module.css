@@ -73,3 +73,32 @@
   color: #002f34;
   border: 2px solid #002f34;
 }
+.imageContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.imageBox {
+  width: 100px;
+  height: 100px;
+  border: 2px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.fileInput {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
