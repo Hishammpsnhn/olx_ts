@@ -76,7 +76,7 @@ function Header() {
 
           <div className="sellMenu">
             <SellButton></SellButton>
-            <div onClick={() => navigate("/post")} className="sellMenuContent">
+            <div onClick={() =>currentUser? navigate("/post"):navigate('/login')} className="sellMenuContent">
               <SellButtonPlus></SellButtonPlus>
               <span>SELL</span>
             </div>

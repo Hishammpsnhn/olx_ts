@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import styles from "./Create.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import camImage from "../../assets/camera.jpg";
@@ -8,10 +8,12 @@ import { firestore } from "../../config/firebase";
 import { validatePost } from "../../utils/FormValidation";
 import ErrorMessage from "../Error/ErrorMsg";
 import { disabledBtn } from "../../utils/inlineStyle";
+import { useAuth } from "../../context/authContext";
 
 const Create = () => {
   const location = useLocation();
   const { selectedCategory, subCategoryName } = location.state;
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
 
   const initialValue: Post = {
@@ -31,7 +33,7 @@ const Create = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setError(null)
+    setError(null);
     const { name, value } = e.target;
     setPost((prev) => ({ ...prev, [name]: value }));
   };
@@ -40,7 +42,7 @@ const Create = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
-    setError(null)
+    setError(null);
     const file = e.target.files?.[0];
     if (file) {
       const formData = new FormData();
@@ -84,9 +86,13 @@ const Create = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const err = validatePost(post)
-    if(err){
+    const err = validatePost(post);
+    if (err) {
       setError(err);
+      return;
+    }
+    if (!currentUser) {
+      navigate("/");
       return;
     }
     console.log(post);
@@ -94,19 +100,26 @@ const Create = () => {
     try {
       const docRef = await addDoc(collection(firestore, "posts"), {
         ...post,
+        seller: {
+          name: currentUser?.name,
+          email: currentUser?.email,
+          phone: currentUser?.phone,
+        },
       });
       console.log("Document written with ID: ", docRef.id);
-      setError(null)
+      setError(null);
       navigate("/");
     } catch (e) {
       console.error("Error adding document: ", e);
       setError("Failed to create post");
     } finally {
       setFormLoading(false);
-
     }
   };
 
+  useEffect(() => {
+    if (!currentUser) navigate("/");
+  }, [currentUser]);
   return (
     <Fragment>
       <h2 className={styles.formMainTitle}>Post your Ad</h2>
@@ -115,7 +128,7 @@ const Create = () => {
         <p className={styles.category}>
           {selectedCategory}/{subCategoryName}
         </p>
-      {error && <ErrorMessage message={error} />}
+        {error && <ErrorMessage message={error} />}
         <form onSubmit={handleSubmit}>
           <label htmlFor="name" className={styles.label}>
             Name
@@ -191,7 +204,7 @@ const Create = () => {
             style={formLoading ? { ...disabledBtn } : {}}
             disabled={loading[0] || loading[1] || loading[2] || formLoading}
           >
-            { formLoading ? "loading..." : "Submit"}
+            {formLoading ? "loading..." : "Submit"}
           </button>
         </form>
       </div>
