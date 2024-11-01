@@ -2,19 +2,26 @@
   border: 1px solid #ddd;
   width: 360px;
   padding: 30px 40px;
-  margin: 80px auto;
+  margin: 40px auto;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
 }
-
+.formMainTitle{
+  font-size: 28px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #002f34;
+  text-align: center;
+}
 .formTitle {
   font-size: 24px;
-  font-weight: bold;
-  text-align: center;
   margin-bottom: 20px;
   color: #002f34;
+}
+.category{
+  color: gray;
+  font-size: 15px;
 }
 
 .label {

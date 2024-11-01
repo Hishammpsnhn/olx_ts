@@ -26,7 +26,7 @@ const categories: Category[] = [
 const Category = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [subCategory, setSubCategory] = useState<string | null>(null);
+  
 
   const handleCategoryClick = (categoryName: string) => {
     setSelectedCategory(
@@ -34,8 +34,8 @@ const Category = () => {
     );
   };
   const handleSubCategoryClick = (subCategoryName: string): void => {
-    setSubCategory(subCategoryName);
-    navigate('/post/attribute')
+   
+    navigate('/post/attribute',{state:{selectedCategory,subCategoryName}})
   };
 
   return (
