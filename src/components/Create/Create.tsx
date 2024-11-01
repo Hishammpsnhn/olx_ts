@@ -31,6 +31,7 @@ const Create = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    setError(null)
     const { name, value } = e.target;
     setPost((prev) => ({ ...prev, [name]: value }));
   };
@@ -39,6 +40,7 @@ const Create = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
+    setError(null)
     const file = e.target.files?.[0];
     if (file) {
       const formData = new FormData();
