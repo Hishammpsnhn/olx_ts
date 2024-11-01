@@ -24,7 +24,7 @@ function Header() {
     <>
       <div className="headerParentDiv">
         <div className="headerChildDiv">
-          <div className="brandName">
+          <div className="brandName" onClick={()=>navigate("/")}>
             <OlxLogo></OlxLogo>
           </div>
           <div className="placeSearch">

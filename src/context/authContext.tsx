@@ -31,7 +31,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const user = JSON.parse(storedUser) as UserInfo;
       console.log(user);
       setCurrentUser(user);
-      navigate("/");
+      // navigate("/");
     }
   }, []);
 

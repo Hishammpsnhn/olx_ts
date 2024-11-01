@@ -6,7 +6,6 @@ const CreatePage = () => {
   return (
     <Fragment>
       <Header />
-        <div>helo</div>
       <Create />
     </Fragment>
   );

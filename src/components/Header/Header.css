@@ -1,8 +1,8 @@
 .headerParentDiv {
   padding: 10px;
   background-color: whitesmoke;
-  position: fixed;
-  width: 100vw;
+  /* position: fixed; */
+  /* width: 100vw; */
   z-index: 999;
 }
 
@@ -152,6 +152,9 @@
 .profile-section{
   display: flex;
   align-items: center;
+}
+.brandName{
+  cursor: pointer;
 }
 .profileContainer {
   position: relative;
