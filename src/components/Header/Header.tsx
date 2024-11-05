@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import "./Header.css";
 import OlxLogo from "../../assets/OlxLogo";
 import Search from "../../assets/Search";
@@ -8,44 +7,89 @@ import SellButton from "../../assets/SellButton";
 import SellButtonPlus from "../../assets/SellButtonPlus";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { firestore } from "../../config/firebase";
+
 function Header() {
   const [dropDown, setDropDown] = useState(false);
+  const [search, setSearch] = useState('');
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const navigate = useNavigate();
-  const { currentUser,setCurrentUser } = useAuth();
+  const { currentUser, setCurrentUser } = useAuth();
 
-  const handleLogout = ()=>{
+
+  const handleLogout = () => {
     setCurrentUser(null);
-    // navigate("/login");
-    localStorage.removeItem('userInfo')
-    setDropDown(false)
-  }
+    localStorage.removeItem('userInfo');
+    setDropDown(false);
+  };
+
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearch(value);
+  
+    if (value) {
+      try {
+       
+        const productsRef = collection(firestore, "posts"); 
+        const q = query(
+          productsRef,
+          where("name", ">=", value),
+          where("name", "<=", value + "\uf8ff") 
+        );
+  
+        const querySnapshot = await getDocs(q);
+        const filteredData = querySnapshot.docs.map((doc) => doc.data().name); 
+        console.log(filteredData)
+  
+        setSuggestions(filteredData);
+      } catch (error) {
+        console.error("Error fetching search data from Firebase:", error);
+      }
+    } else {
+      setSuggestions([]);
+    }
+  };
 
   return (
     <>
       <div className="headerParentDiv">
         <div className="headerChildDiv">
-          <div className="brandName" onClick={()=>navigate("/")}>
-            <OlxLogo></OlxLogo>
+          <div className="brandName" onClick={() => navigate("/")}>
+            <OlxLogo />
           </div>
           <div className="placeSearch">
-            <Search></Search>
+            <Search />
             <input type="text" />
-            <Arrow></Arrow>
+            <Arrow />
           </div>
           <div className="productSearch">
             <div className="input">
               <input
                 type="text"
-                placeholder="Find car,mobile phone and more..."
+                placeholder="Find car, mobile phone and more..."
+                value={search}
+                onChange={handleChange}
               />
+            
             </div>
+              {/* Suggestions dropdown */}
+              {suggestions.length > 0 && (
+                <div className="suggestionsDropdown">
+                  {suggestions.map((item:any, index:any) => (
+                    <div key={index} className="suggestionItem">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              )}
             <div className="searchAction">
-              <Search color="#ffffff"></Search>
+              <Search color="#ffffff" />
             </div>
           </div>
           <div className="language">
             <span> ENGLISH </span>
-            <Arrow></Arrow>
+            <Arrow />
           </div>
           {!currentUser ? (
             <div className="loginPage">
@@ -62,7 +106,7 @@ function Header() {
                   {currentUser.name.charAt(0).toUpperCase()}
                 </div>
                 <div onClick={() => setDropDown((prev) => !prev)}>
-                  <Arrow></Arrow>
+                  <Arrow />
                 </div>
               </div>
               {dropDown && (
@@ -73,11 +117,13 @@ function Header() {
               )}
             </>
           )}
-
           <div className="sellMenu">
-            <SellButton></SellButton>
-            <div onClick={() =>currentUser? navigate("/post"):navigate('/login')} className="sellMenuContent">
-              <SellButtonPlus></SellButtonPlus>
+            <SellButton />
+            <div
+              onClick={() => (currentUser ? navigate("/post") : navigate('/login'))}
+              className="sellMenuContent"
+            >
+              <SellButtonPlus />
               <span>SELL</span>
             </div>
           </div>

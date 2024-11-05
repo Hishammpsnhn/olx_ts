@@ -18,3 +18,8 @@ export type Post ={
     selectedCategory:string;
     subCategoryName:string;
 }
+
+export type Item = Post & {
+    seller: UserInfo;
+    id: any;
+};

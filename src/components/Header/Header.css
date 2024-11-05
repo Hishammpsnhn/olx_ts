@@ -78,6 +78,44 @@
   transform: translate(-50%, -50%);
   fill: white;
 }
+.productSearch {
+  width: 35em;
+  height: 48px;
+  border: 2px solid #002f34;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  justify-content: space-between;
+  position: relative; /* Add relative positioning to contain the dropdown */
+}
+
+.suggestionsDropdown {
+  position: absolute;
+  top: 100%; /* Position directly below the input */
+  left: 0;
+  width: 100%; /* Inherit full width of the parent */
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.suggestionItem {
+  padding: 10px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.suggestionItem:hover {
+  background-color: #f0f0f0;
+}
+
 
 .language {
   height: 48px;
@@ -203,6 +241,7 @@
 .sellMenu .sellMenuContent span {
   margin-left: 5px;
 }
+
 
 @media only screen and (max-width: 700px) {
   .placeSearch,

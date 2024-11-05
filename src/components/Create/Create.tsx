@@ -49,7 +49,6 @@ const Create = () => {
       formData.append("file", file);
       formData.append("upload_preset", "olx_clone_ts");
 
-      // Set loading state for this index
       setLoading((prevLoading) => {
         const newLoading = [...prevLoading];
         newLoading[index] = true;

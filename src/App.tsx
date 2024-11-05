@@ -15,7 +15,7 @@ function App() {
       <Route path="/signup" element={<SignupPage />} />
       <Route path='/post' element={<CategoryPage />} />
       <Route path="/post/attribute" element={<CreatePage />} />
-      <Route path="/view" element={<ViewPost />} />
+      <Route path="/view/:id" element={<ViewPost />} />
     </Routes>
   );
 }
