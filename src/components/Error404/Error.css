@@ -1,0 +1,10 @@
+.error-container{
+    display: flex;
+    width: fit-content;
+    margin: auto;
+    margin-top: 12rem;
+}
+.error-container div{
+    justify-content: space-between;
+    max-width: 400px;
+}

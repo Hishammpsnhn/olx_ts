@@ -1,5 +1,4 @@
 .bannerParentDiv {
-  padding-top: 4em;
   overflow: hidden;
 }
 .bannerParentDiv .bannerChildDiv {
@@ -12,6 +11,10 @@
 .bannerParentDiv .bannerChildDiv .menuBar span {
 }
 
+.bannerParentDiv .bannerChildDiv .menuBar .categoryMenu span {
+  margin-right: 16px;
+  font-weight: bolder;
+}
 .bannerParentDiv .bannerChildDiv .menuBar .categoryMenu span {
   margin-right: 16px;
   font-weight: bolder;
