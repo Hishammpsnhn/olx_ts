@@ -12,36 +12,34 @@ import { firestore } from "../../config/firebase";
 
 function Header() {
   const [dropDown, setDropDown] = useState(false);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const navigate = useNavigate();
   const { currentUser, setCurrentUser } = useAuth();
 
-
   const handleLogout = () => {
     setCurrentUser(null);
-    localStorage.removeItem('userInfo');
+    localStorage.removeItem("userInfo");
     setDropDown(false);
   };
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearch(value);
-  
-    if (value) {
+
+    if (value && value.length > 2) {
       try {
-       
-        const productsRef = collection(firestore, "posts"); 
+        const productsRef = collection(firestore, "posts");
         const q = query(
           productsRef,
           where("name", ">=", value),
-          where("name", "<=", value + "\uf8ff") 
+          where("name", "<=", value + "\uf8ff")
         );
-  
+
         const querySnapshot = await getDocs(q);
-        const filteredData = querySnapshot.docs.map((doc) => doc.data().name); 
-        console.log(filteredData)
-  
+        const filteredData = querySnapshot.docs.map((doc) => doc.data().name);
+        console.log(filteredData);
+
         setSuggestions(filteredData);
       } catch (error) {
         console.error("Error fetching search data from Firebase:", error);
@@ -71,18 +69,17 @@ function Header() {
                 value={search}
                 onChange={handleChange}
               />
-            
             </div>
-              {/* Suggestions dropdown */}
-              {suggestions.length > 0 && (
-                <div className="suggestionsDropdown">
-                  {suggestions.map((item:any, index:any) => (
-                    <div key={index} className="suggestionItem">
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              )}
+            {/* Suggestions dropdown */}
+            {suggestions.length > 0 && (
+              <div className="suggestionsDropdown">
+                {suggestions.map((item: any, index: any) => (
+                  <div key={index} className="suggestionItem">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            )}
             <div className="searchAction">
               <Search color="#ffffff" />
             </div>
@@ -120,7 +117,9 @@ function Header() {
           <div className="sellMenu">
             <SellButton />
             <div
-              onClick={() => (currentUser ? navigate("/post") : navigate('/login'))}
+              onClick={() =>
+                currentUser ? navigate("/post") : navigate("/login")
+              }
               className="sellMenuContent"
             >
               <SellButtonPlus />
