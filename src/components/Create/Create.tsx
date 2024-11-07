@@ -9,6 +9,11 @@ import { validatePost } from "../../utils/FormValidation";
 import ErrorMessage from "../Error/ErrorMsg";
 import { disabledBtn } from "../../utils/inlineStyle";
 import { useAuth } from "../../context/authContext";
+import { locationCatch } from "../../utils/location";
+interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
 
 const Create = () => {
   const location = useLocation();
@@ -29,6 +34,9 @@ const Create = () => {
   const [loading, setLoading] = useState([false, false, false]);
   const [formLoading, setFormLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [locationDetail, setLocationDetail] = useState<Coordinates | null>(
+    null
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -90,13 +98,20 @@ const Create = () => {
       setError(err);
       return;
     }
+  
     if (!currentUser) {
       navigate("/");
       return;
     }
+  
     console.log(post);
     setFormLoading(true);
+  
     try {
+      const coords = await locationCatch();
+      console.log("Latitude:", coords.latitude, "Longitude:", coords.longitude);
+      setLocationDetail(coords);
+  
       const docRef = await addDoc(collection(firestore, "posts"), {
         ...post,
         seller: {
@@ -104,17 +119,19 @@ const Create = () => {
           email: currentUser?.email,
           phone: currentUser?.phone,
         },
+        location: coords, 
       });
       console.log("Document written with ID: ", docRef.id);
       setError(null);
       navigate("/");
-    } catch (e) {
-      console.error("Error adding document: ", e);
-      setError("Failed to create post");
+    } catch (error) {
+      console.error(error);
+      setError(typeof error === "string" ? error : "Failed to create post");
     } finally {
       setFormLoading(false);
     }
   };
+  
 
   useEffect(() => {
     if (!currentUser) navigate("/");
