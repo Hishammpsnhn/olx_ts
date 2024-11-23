@@ -23,7 +23,7 @@ function Posts() {
           id: doc.id, // Add 'id' explicitly here
         }));
         console.log(items);
-        setData(items);
+        setData(items.reverse());
       } catch (error) {
         console.error("Error fetching data: ", error);
       } finally {
@@ -75,9 +75,9 @@ function Posts() {
                     <span className="kilometer">{item.selectedCategory}</span>
                     <p className="name"> {item.subCategoryName}</p>
                   </div>
-                  <div className="date">
+                  {/* <div className="date">
                     <span>Tue May 04 2021</span>
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </>

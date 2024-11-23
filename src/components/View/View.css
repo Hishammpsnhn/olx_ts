@@ -1,19 +1,20 @@
 .viewParentDiv {
   padding-top: 4em;
   display: flex;
+  justify-content: space-around;
 }
 .viewParentDiv .imageShowDiv {
   padding: 16px;
-  width: 70vw;
+  display: flex;
 }
 .viewParentDiv .imageShowDiv img {
-  width: 65vw;
-  height: 85vh;
+  width: 50vw;
+  height: 55vh;
+  /* object-fit: cover; */
 }
 
 .viewParentDiv .rightSection {
   padding: 16px;
-  margin-top: 3em;
   width: 30vw;
 }
 

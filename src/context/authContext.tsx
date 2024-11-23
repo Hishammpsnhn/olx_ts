@@ -21,7 +21,6 @@ interface AuthProviderProps {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState<UserInfo | null>(null);
   const [loading,setLoading] = useState(false)
 
@@ -31,7 +30,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const user = JSON.parse(storedUser) as UserInfo;
       console.log(user);
       setCurrentUser(user);
-      // navigate("/");
     }
   }, []);
 

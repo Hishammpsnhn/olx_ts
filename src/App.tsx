@@ -7,6 +7,7 @@ import SignupPage from "./pages/Signup";
 import ViewPost from "./pages/ViewPost";
 import { CategoryPage } from "./pages/CategoryPage";
 import Error404Page from "./pages/Error404Page";
+import Map from "./components/Map/Map";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Route path='/post' element={<CategoryPage />} />
       <Route path="/post/attribute" element={<CreatePage />} />
       <Route path="/view/:id" element={<ViewPost />} />
+  
       <Route path="*" element={<Error404Page />} />
     </Routes>
   );
